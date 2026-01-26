@@ -1,0 +1,65 @@
+"""ESPN API data fetching functions for various sports."""
+
+import requests
+from typing import Dict, List, Optional
+
+def fetch_nhl_scores() -> Optional[Dict]:
+    """Fetch current NHL scores and games."""
+    url = "http://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        return response.json()
+    except Exception as e:
+        print(f"Error fetching NHL scores: {e}")
+        return None
+
+def fetch_nba_scores() -> Optional[Dict]:
+    """Fetch current NBA scores and games."""
+    url = "http://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        return response.json()
+    except Exception as e:
+        print(f"Error fetching NBA scores: {e}")
+        return None
+
+def fetch_nfl_scores() -> Optional[Dict]:
+    """Fetch current NFL scores and games."""
+    url = "http://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        return response.json()
+    except Exception as e:
+        print(f"Error fetching NFL scores: {e}")
+        return None
+
+
+def parse_game_data(game: Dict, sport: str = "nhl") -> Dict:
+    """
+    Parse ESPN API game data into a normalized format.
+    """
+    status = game['status']
+    competition = game['competitions'][0]
+
+    # Safely get odds (may not exist for all games)
+    odds = None
+    if 'odds' in competition and len(competition['odds']) > 0:
+        odds = competition['odds'][0].get('details', 'N/A')
+
+    return {
+        'state': status['type']['state'],
+        'description': status['type']['description'],
+        'period': status.get('period', 0),
+        'game_status': status['type']['detail'],
+        'clock': status.get('displayClock', '0:00'),
+        'date': game['date'],
+        'home_team': competition['competitors'][0]['team']['displayName'],
+        'away_team': competition['competitors'][1]['team']['displayName'],
+        'home_score': competition['competitors'][0]['score'],
+        'away_score': competition['competitors'][1]['score'],
+        'odds': odds,
+        'sport': sport
+    }

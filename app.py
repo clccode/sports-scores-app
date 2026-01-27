@@ -44,12 +44,8 @@ if raw_data:
 
         if game_data['state'] == 'pre':
             game_time = format_game_time(game_data['date'], timezone)
-            if sport == "NHL":
-                st.info(f"{game_data['away_team']} @ {game_data['home_team']} - {game_time}\n\n"
+            st.info(f"{game_data['away_team']} @ {game_data['home_team']} - {game_time}\n\n"
                         f"Odds: {game_data['odds']}\n")
-            elif sport == "NBA":
-                st.info(f"{game_data['away_team']} @ {game_data['home_team']} - {game_time}\n\n"
-                        f"Spread: {game_data['odds']}\n")
 
         elif game_data['state'] == 'in':
             st.success(f"{game_data['away_team']} {game_data['away_score']} @ "

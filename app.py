@@ -45,12 +45,12 @@ if raw_data:
 
         if game_data['state'] == 'pre':
             game_time = format_game_time(game_data['date'], timezone)
-            broadcast_text = f"\n\nWatch: {game_data['broadcast']}" if game_data['broadcast'] else ""
+            broadcast_text = f"\n\nWatch: {game_data['broadcast']}" if game_data.get('broadcast') else ""
             st.info(f"{game_data['away_team']} @ {game_data['home_team']} - {game_time}\n\n"
                         f"Odds: {game_data['odds']}\n\n{broadcast_text}")
 
         elif game_data['state'] == 'in':
-            broadcast_text = f"\n\nWatch: {game_data['broadcast']}" if game_data['broadcast'] else ""
+            broadcast_text = f"\n\nWatch: {game_data['broadcast']}" if game_data.get('broadcast') else ""
             st.success(f"{game_data['away_team']} {game_data['away_score']} @ "
                        f"{game_data['home_team']} {game_data['home_score']}\n\n"
                        f"{game_data['game_status']}\n\n{broadcast_text}")

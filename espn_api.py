@@ -36,7 +36,6 @@ def fetch_nfl_scores() -> Optional[Dict]:
         print(f"Error fetching NFL scores: {e}")
         return None
 
-
 def parse_game_data(game: Dict, sport: str = "nhl") -> Dict:
     """
     Parse ESPN API game data into a normalized format.
@@ -63,3 +62,72 @@ def parse_game_data(game: Dict, sport: str = "nhl") -> Dict:
         'odds': odds,
         'sport': sport
     }
+
+def fetch_nhl_news() -> Optional[List[Dict]]:
+    """Fetch latest NHL news articles."""
+    try:
+        url = "http://site.api.espn.com/apis/site/v2/sports/hockey/nhl/news"
+        response = requests.get(url)
+        response.raise_for_status()
+        data = response.json()
+
+        news_list = []
+        for article in data['articles']:
+            news_list.append({
+                'headline': article['headline'],
+                'url': article['links']['web']['href'],
+                'description': article.get('description', ''),  # Some articles may not have this
+                'published': article.get('published', '')
+            })
+
+        return news_list
+
+    except Exception as e:
+        print(f"Error fetching NHL news: {e}")
+        return None
+
+def fetch_nba_news() -> Optional[List[Dict]]:
+    """Fetch latest NBA news articles."""
+    try:
+        url = "http://site.api.espn.com/apis/site/v2/sports/basketball/nba/news"
+        response = requests.get(url)
+        response.raise_for_status()
+        data = response.json()
+
+        news_list = []
+        for article in data['articles']:
+            news_list.append({
+                'headline': article['headline'],
+                'url': article['links']['web']['href'],
+                'description': article.get('description', ''),
+                'published': article.get('published', '')
+            })
+
+        return news_list
+
+    except Exception as e:
+        print(f"Error fetching NBA news: {e}")
+        return None
+
+def fetch_nfl_news() -> Optional[List[Dict]]:
+    """Fetch latest NFL news articles."""
+    try:
+        url = "http://site.api.espn.com/apis/site/v2/sports/football/nfl/news"
+        response = requests.get(url)
+        response.raise_for_status()
+        data = response.json()
+
+        news_list = []
+        for article in data['articles']:
+            news_list.append({
+                'headline': article['headline'],
+                'url': article['links']['web']['href'],
+                'description': article.get('description', ''),
+                'published': article.get('published', '')
+            })
+
+        return news_list
+
+    except Exception as e:
+        print(f"Error fetching NFL news: {e}")
+        return None

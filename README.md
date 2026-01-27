@@ -11,6 +11,10 @@ A real-time sports scores dashboard built with Streamlit, displaying live scores
 - 🎲 Pre-game odds (via DraftKings)
 - 📊 Live game status with period/quarter info
 
+## Live Version
+
+You can see the live version here: https://sports-scores-app.streamlit.app/
+
 ## Installation
 
 1. Clone the repository:

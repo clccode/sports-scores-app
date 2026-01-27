@@ -60,6 +60,7 @@ if raw_data:
     # News section
     st.divider()
     st.subheader(f"📰 {sport} News")
+    st.caption("News from ESPN")
 
     # Fetch news based on sport
     if sport == "NHL":

@@ -36,12 +36,31 @@ def fetch_nfl_scores() -> Optional[Dict]:
         print(f"Error fetching NFL scores: {e}")
         return None
 
+def get_broadcast_info(game: Dict) -> str:
+    """Extract all broadcast info from game data."""
+    competition = game['competitions'][0]
+
+    if 'broadcasts' not in competition or not competition['broadcasts']:
+        return None
+
+    broadcast_list = []
+    for broadcast in competition['broadcasts']:
+        channels = ", ".join(broadcast['names'])
+
+        market = broadcast['market'].title()
+        broadcast_list.append(f"{channels} ({market})")
+
+    return " | ".join(broadcast_list) if broadcast_list else None
+
 def parse_game_data(game: Dict, sport: str = "nhl") -> Dict:
     """
     Parse ESPN API game data into a normalized format.
     """
     status = game['status']
     competition = game['competitions'][0]
+
+    # Get broadcast info
+    broadcast = get_broadcast_info(game)
 
     # Safely get odds (may not exist for all games)
     odds = None
@@ -60,6 +79,7 @@ def parse_game_data(game: Dict, sport: str = "nhl") -> Dict:
         'home_score': competition['competitors'][0]['score'],
         'away_score': competition['competitors'][1]['score'],
         'odds': odds,
+        'broadcast': broadcast,
         'sport': sport
     }
 

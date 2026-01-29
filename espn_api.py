@@ -48,10 +48,6 @@ def get_broadcast_info(game: Dict, sport: str = "nhl") -> str:
     for broadcast in competition['broadcasts']:
         channels = ", ".join(broadcast['names'])
 
-        # Adjust broadcasts display for NFL, which only has national broadcasts
-        if sport == "nhl" and broadcast['market'] == 'national':
-            return channels
-
         market = broadcast['market'].title()
         broadcast_list.append(f"{channels} ({market})")
 

@@ -36,7 +36,7 @@ def fetch_nfl_scores() -> Optional[Dict]:
         print(f"Error fetching NFL scores: {e}")
         return None
 
-def get_broadcast_info(game: Dict) -> str:
+def get_broadcast_info(game: Dict, sport: str = "nhl") -> str:
     """Extract all broadcast info from game data."""
     competition = game['competitions'][0]
 
@@ -44,8 +44,13 @@ def get_broadcast_info(game: Dict) -> str:
         return None
 
     broadcast_list = []
+
     for broadcast in competition['broadcasts']:
         channels = ", ".join(broadcast['names'])
+
+        # Adjust broadcasts display for NFL, which only has national broadcasts
+        if sport == "nhl" and broadcast['market'] == 'national':
+            return channels
 
         market = broadcast['market'].title()
         broadcast_list.append(f"{channels} ({market})")

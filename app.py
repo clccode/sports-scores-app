@@ -50,6 +50,8 @@ else:
                                                                                                                                                       
 selected_tz = st.sidebar.selectbox("Timezone", timezone_options, index=default_index)
 
+st.sidebar.caption(f"Detected Timezone: {default_timezone}")
+
 if st.sidebar.button("🔄 Refresh"):
     st.rerun()  # Forces the whole app to re-run, fetching fresh data
 

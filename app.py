@@ -1,6 +1,7 @@
 """Sports Scores Dashboard - Streamlit App"""
 
 import streamlit as st
+from streamlit_js import st_js
 from espn_api import (fetch_nba_scores, fetch_nhl_scores, fetch_nfl_scores, parse_game_data,
                       fetch_nhl_news, fetch_nba_news, fetch_nfl_news)
 from formatters import format_game_time
@@ -11,10 +12,43 @@ st.set_page_config(page_title="Sports Scores", page_icon="🏒", layout="wide")
 # Sidebar
 st.sidebar.header("Settings")
 sport = st.sidebar.selectbox("Sport", ["NHL", "NBA", "NFL"])
-timezone = st.sidebar.selectbox(
-    "Timezone",
-    ["America/New_York", "America/Chicago", "America/Denver","America/Los_Angeles"]
+
+# Get the user's timezone using JavaScript's Intl API
+user_tz = st_js("""
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+  } catch (e) {
+    return null;
+  }
+""",
+    key="user-timezone",
 )
+
+# Timezone selection with default to user's timezone
+default_timezone = user_tz[0] if user_tz else "America/New_York"
+
+timezone_options = [                                                                                                                                
+    "America/New_York",                                                                                                                             
+    "America/Chicago",                                                                                                                              
+    "America/Denver",                                                                                                                               
+    "America/Los_Angeles",                                                                                                                          
+    "America/Anchorage",                                                                                                                            
+    "Pacific/Honolulu",                                                                                                                             
+    "Europe/London",                                                                                                                                
+    "Europe/Paris",                                                                                                                                 
+    "Europe/Berlin",                                                                                                                                
+    "Asia/Tokyo",                                                                                                                                   
+    "Asia/Shanghai",                                                                                                                                
+    "Australia/Sydney",                                                                                                                             
+    "UTC",                                                                                                                                          
+]
+              
+if default_timezone in timezone_options:                                                                                                            
+      default_index = timezone_options.index(default_timezone)                                                                                        
+else:                                                                                                                                               
+    default_index = 0                                                                                                                               
+                                                                                                                                                      
+selected_tz = st.sidebar.selectbox("Timezone", timezone_options, index=default_index)
 
 if st.sidebar.button("🔄 Refresh"):
     st.rerun()  # Forces the whole app to re-run, fetching fresh data
@@ -44,7 +78,7 @@ if raw_data:
         game_data = parse_game_data(game, sport_code)
 
         if game_data['state'] == 'pre':
-            game_time = format_game_time(game_data['date'], timezone)
+            game_time = format_game_time(game_data['date'], selected_tz)
             broadcast_text = f"\n\nWatch: {game_data['broadcast']}" if game_data.get('broadcast') else ""
             st.info(f"{game_data['away_team']} @ {game_data['home_team']} - {game_time}\n\n"
                         f"Odds: {game_data['odds']}\n\n{broadcast_text}")

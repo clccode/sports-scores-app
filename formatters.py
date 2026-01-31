@@ -16,8 +16,10 @@ def format_game_time(utc_time_string: str, timezone: str = "America/New_York") -
         Formatted time string like "3:00 PM"
     """
     user_tz = pytz.timezone(timezone)
+    today = datetime.now(user_tz).date()
     game_time_utc = datetime.fromisoformat(utc_time_string.replace('Z', '+00:00'))
     game_time_local = game_time_utc.astimezone(user_tz)
+    game_date = game_time_local.date()
 
     # Platform-safe formatting
     hour = game_time_local.hour
@@ -26,4 +28,7 @@ def format_game_time(utc_time_string: str, timezone: str = "America/New_York") -
     display_hour = hour if hour <= 12 else hour - 12
     display_hour = 12 if display_hour == 0 else display_hour
 
-    return f"{display_hour}:{minute:02d} {am_pm}"
+    if game_date == today:
+        return f"{display_hour}:{minute:02d} {am_pm}"
+    else:
+        return f"{game_time_local.strftime('%b')} {game_time_local.day}, {display_hour}:{minute:02d} {am_pm}"

@@ -5,6 +5,7 @@ from streamlit_js import st_js
 from espn_api import (fetch_nba_scores, fetch_nhl_scores, fetch_nfl_scores, parse_game_data,
                       fetch_nhl_news, fetch_nba_news, fetch_nfl_news)
 from formatters import format_game_time
+import pytz
 
 # Page config
 st.set_page_config(page_title="Sports Scores", page_icon="🏒", layout="wide")
@@ -27,21 +28,7 @@ user_tz = st_js("""
 # Timezone selection with default to user's timezone
 default_timezone = user_tz[0] if user_tz else "America/New_York"
 
-timezone_options = [                                                                                                                                
-    "America/New_York",                                                                                                                             
-    "America/Chicago",                                                                                                                              
-    "America/Denver",                                                                                                                               
-    "America/Los_Angeles",                                                                                                                          
-    "America/Anchorage",                                                                                                                            
-    "Pacific/Honolulu",                                                                                                                             
-    "Europe/London",                                                                                                                                
-    "Europe/Paris",                                                                                                                                 
-    "Europe/Berlin",                                                                                                                                
-    "Asia/Tokyo",                                                                                                                                   
-    "Asia/Shanghai",                                                                                                                                
-    "Australia/Sydney",                                                                                                                             
-    "UTC",                                                                                                                                          
-]
+timezone_options = pytz.common_timezones
               
 if default_timezone in timezone_options:                                                                                                            
       default_index = timezone_options.index(default_timezone)                                                                                        

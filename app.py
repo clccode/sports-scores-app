@@ -2,8 +2,9 @@
 
 import streamlit as st
 from streamlit_js import st_js
-from espn_api import (fetch_nba_scores, fetch_nhl_scores, fetch_nfl_scores, parse_game_data,
-                      fetch_nhl_news, fetch_nba_news, fetch_nfl_news)
+from espn_api import (fetch_nba_scores, fetch_nhl_scores, fetch_nfl_scores, fetch_premier_league_scores,
+                      parse_game_data,fetch_nhl_news, fetch_nba_news, fetch_nfl_news, 
+                      fetch_premier_league_news)
 from formatters import format_game_time
 import pytz
 
@@ -12,7 +13,7 @@ st.set_page_config(page_title="Sports Scores", page_icon="🏒", layout="wide")
 
 # Sidebar
 st.sidebar.header("Settings")
-sport = st.sidebar.selectbox("Sport", ["NHL", "NBA", "NFL"])
+sport = st.sidebar.selectbox("Sport", ["NHL", "NBA", "NFL", "Premier League"])
 
 # Get the user's timezone using JavaScript's Intl API
 user_tz = st_js("""
@@ -60,6 +61,10 @@ elif sport == "NFL":
     raw_data = fetch_nfl_scores()
     sport_code = "nfl"
     sport_icon = "🏈"
+elif sport == "Premier League":
+    raw_data = fetch_premier_league_scores()
+    sport_code = "eng.1"
+    sport_icon = "⚽"
 
 if raw_data:
     st.subheader(f"{sport_icon} {sport} Scores")
@@ -69,18 +74,30 @@ if raw_data:
         if game_data['state'] == 'pre':
             game_time = format_game_time(game_data['date'], selected_tz)
             broadcast_text = f"\n\nWatch: {game_data['broadcast']}" if game_data.get('broadcast') else ""
-            st.info(f"{game_data['away_team']} @ {game_data['home_team']} - {game_time}\n\n"
+            if sport_code != 'eng.1':
+                st.info(f"{game_data['away_team']} @ {game_data['home_team']} - {game_time}\n\n"
                         f"Odds: {game_data['odds']}\n\n{broadcast_text}")
+            else:
+                st.info(f"{game_data['home_team']} vs {game_data['away_team']} - {game_time}\n\n{broadcast_text}")
 
         elif game_data['state'] == 'in':
             broadcast_text = f"\n\nWatch: {game_data['broadcast']}" if game_data.get('broadcast') else ""
-            st.success(f"{game_data['away_team']} {game_data['away_score']} @ "
-                       f"{game_data['home_team']} {game_data['home_score']}\n\n"
-                       f"{game_data['game_status']}\n\n{broadcast_text}")
+            if sport_code != 'eng.1':
+                st.success(f"{game_data['away_team']} {game_data['away_score']} @ "
+                    f"{game_data['home_team']} {game_data['home_score']}\n\n"
+                    f"{game_data['game_status']}\n\n{broadcast_text}")
+            else:
+                st.success(f"{game_data['home_team']} {game_data['home_score']} vs "
+                    f"{game_data['away_score']} {game_data['away_team']}\n\n"
+                    f"{game_data['game_status']}\n\n{broadcast_text}")
 
         else:
-            st.write(f"{game_data['away_team']} {game_data['away_score']} @ "
+            if sport_code != 'eng.1':
+                st.write(f"{game_data['away_team']} {game_data['away_score']} @ "
                      f"{game_data['home_team']} {game_data['home_score']} - {game_data['game_status']}")
+            else:
+                st.write(f"{game_data['home_team']} {game_data['home_score']} - "
+                         f"{game_data['away_score']} {game_data['away_team']} - {game_data['game_status']}")
 
     # News section
     st.divider()
@@ -94,6 +111,8 @@ if raw_data:
         news = fetch_nba_news()
     elif sport == "NFL":
         news = fetch_nfl_news()
+    elif sport == "Premier League":
+        news = fetch_premier_league_news()
 
     if news:
         for i, article in enumerate(news[:5], 1):  # Show top 5 articles

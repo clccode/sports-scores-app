@@ -36,6 +36,17 @@ def fetch_nfl_scores() -> Optional[Dict]:
         print(f"Error fetching NFL scores: {e}")
         return None
 
+def fetch_premier_league_scores() -> Optional[Dict]:
+    """Fetch current Premier League scores and games."""
+    url = "http://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        return response.json()
+    except Exception as e:
+        print(f"Error fetching Premier League scores: {e}")
+        return None
+
 def get_broadcast_info(game: Dict, sport: str = "nhl") -> str:
     """Extract all broadcast info from game data."""
     competition = game['competitions'][0]
@@ -65,7 +76,7 @@ def parse_game_data(game: Dict, sport: str = "nhl") -> Dict:
 
     # Safely get odds (may not exist for all games)
     odds = None
-    if 'odds' in competition and len(competition['odds']) > 0:
+    if 'odds' in competition and len(competition['odds']) > 0 and competition['odds'][0] is not None:
         odds = competition['odds'][0].get('details', 'N/A')
 
     return {
@@ -151,4 +162,27 @@ def fetch_nfl_news() -> Optional[List[Dict]]:
 
     except Exception as e:
         print(f"Error fetching NFL news: {e}")
+        return None
+    
+def fetch_premier_league_news() -> Optional[List[Dict]]:
+    """Fetch latest Premier League news articles."""
+    try:
+        url = "http://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/news"
+        response = requests.get(url)
+        response.raise_for_status()
+        data = response.json()
+
+        news_list = []
+        for article in data['articles']:
+            news_list.append({
+                'headline': article['headline'],
+                'url': article['links']['web']['href'],
+                'description': article.get('description', ''),
+                'published': article.get('published', '')
+            })
+
+        return news_list
+
+    except Exception as e:
+        print(f"Error fetching Premier League news: {e}")
         return None

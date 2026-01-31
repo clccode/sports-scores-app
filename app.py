@@ -3,13 +3,13 @@
 import streamlit as st
 from streamlit_js import st_js
 from espn_api import (fetch_nba_scores, fetch_nhl_scores, fetch_nfl_scores, fetch_premier_league_scores,
-                      parse_game_data,fetch_nhl_news, fetch_nba_news, fetch_nfl_news, 
+                      parse_game_data, fetch_nhl_news, fetch_nba_news, fetch_nfl_news, 
                       fetch_premier_league_news)
 from formatters import format_game_time
 import pytz
 
 # Page config
-st.set_page_config(page_title="Sports Scores", page_icon="🏒", layout="wide")
+st.set_page_config(page_title="Sports Scores", page_icon="🏅", layout="wide")
 
 # Sidebar
 st.sidebar.header("Settings")

@@ -1,122 +1,77 @@
 import requests
 import pandas as pd
 
-def fetch_nhl_points_leaders():
+# Cache for API data to avoid multiple calls
+_nhl_data_cache = None
+
+def _fetch_nhl_data():
+    """Fetch NHL leaders data from ESPN API with error handling."""
+    global _nhl_data_cache
+
+    if _nhl_data_cache is not None:
+        return _nhl_data_cache
+
     url = "https://site.api.espn.com/apis/site/v3/sports/hockey/nhl/leaders"
 
-    response = requests.get(url)
-    data = response.json()
+    try:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+        _nhl_data_cache = data['leaders']['categories']
+        return _nhl_data_cache
+    except (requests.RequestException, KeyError, ValueError) as e:
+        print(f"Error fetching NHL data: {e}")
+        return None
 
-    leaders = data['leaders']['categories'][2]['leaders']
+def _build_leaders_df(leaders, stat_column_name):
+    """Helper function to build a DataFrame from leaders data."""
+    if not leaders:
+        return pd.DataFrame()
 
-    # set up the dataframe:
-    points_df = pd.DataFrame({
-        'Player': leader['athlete']['displayName'],
-        'Team': leader['team']['displayName'],
-        'Points': leader['displayValue']
-    }
-    for leader in leaders                        
-    )
+    try:
+        df = pd.DataFrame({
+            'Player': [leader['athlete']['displayName'] for leader in leaders],
+            'Team': [leader['team']['displayName'] for leader in leaders],
+            stat_column_name: [leader['displayValue'] for leader in leaders]
+        })
+        df.index = range(1, len(df) + 1)
+        return df
+    except (KeyError, TypeError) as e:
+        print(f"Error building DataFrame: {e}")
+        return pd.DataFrame()
 
-    points_df.index = range(1, len(points_df) + 1)
-    return points_df
+def fetch_nhl_points_leaders():
+    categories = _fetch_nhl_data()
+    if categories is None or len(categories) < 3:
+        return pd.DataFrame()
+    return _build_leaders_df(categories[2]['leaders'], 'Points')
 
 def fetch_nhl_goals_leaders():
-    url = "https://site.api.espn.com/apis/site/v3/sports/hockey/nhl/leaders"
-
-    response = requests.get(url)
-    data = response.json()
-
-    leaders = data['leaders']['categories'][0]['leaders']
-
-    # set up the dataframe:
-    goals_df = pd.DataFrame({
-        'Player': leader['athlete']['displayName'],
-        'Team': leader['team']['displayName'],
-        'Goals': leader['displayValue']
-    }
-    for leader in leaders                        
-    )
-
-    goals_df.index = range(1, len(goals_df) + 1)
-    return goals_df
+    categories = _fetch_nhl_data()
+    if categories is None or len(categories) < 1:
+        return pd.DataFrame()
+    return _build_leaders_df(categories[0]['leaders'], 'Goals')
 
 def fetch_nhl_assists_leaders():
-    url = "https://site.api.espn.com/apis/site/v3/sports/hockey/nhl/leaders"
-
-    response = requests.get(url)
-    data = response.json()
-
-    leaders = data['leaders']['categories'][1]['leaders']
-
-    # set up the dataframe:
-    assists_df = pd.DataFrame({
-        'Player': leader['athlete']['displayName'],
-        'Team': leader['team']['displayName'],
-        'Assists': leader['displayValue']
-    }
-    for leader in leaders                        
-    )
-
-    assists_df.index = range(1, len(assists_df) + 1)
-    return assists_df
+    categories = _fetch_nhl_data()
+    if categories is None or len(categories) < 2:
+        return pd.DataFrame()
+    return _build_leaders_df(categories[1]['leaders'], 'Assists')
 
 def fetch_nhl_plus_minus_leaders():
-    url = "https://site.api.espn.com/apis/site/v3/sports/hockey/nhl/leaders"
-
-    response = requests.get(url)
-    data = response.json()
-
-    leaders = data['leaders']['categories'][3]['leaders']
-
-    # set up the dataframe:
-    plus_minus_df = pd.DataFrame({
-        'Player': leader['athlete']['displayName'],
-        'Team': leader['team']['displayName'],
-        '+/-': leader['displayValue']
-    }
-    for leader in leaders                        
-    )
-
-    plus_minus_df.index = range(1, len(plus_minus_df) + 1)
-    return plus_minus_df
+    categories = _fetch_nhl_data()
+    if categories is None or len(categories) < 4:
+        return pd.DataFrame()
+    return _build_leaders_df(categories[3]['leaders'], '+/-')
 
 def fetch_nhl_gaa_leaders():
-    url = "https://site.api.espn.com/apis/site/v3/sports/hockey/nhl/leaders"
-
-    response = requests.get(url)
-    data = response.json()
-
-    leaders = data['leaders']['categories'][4]['leaders']
-
-    # set up the dataframe:
-    gaa_df = pd.DataFrame({
-        'Player': leader['athlete']['displayName'],
-        'Team': leader['team']['displayName'],
-        'GAA': leader['displayValue']
-    }
-    for leader in leaders                        
-    )
-
-    gaa_df.index = range(1, len(gaa_df) + 1)
-    return gaa_df
+    categories = _fetch_nhl_data()
+    if categories is None or len(categories) < 5:
+        return pd.DataFrame()
+    return _build_leaders_df(categories[4]['leaders'], 'GAA')
 
 def fetch_nhl_pim_leaders():
-    url = "https://site.api.espn.com/apis/site/v3/sports/hockey/nhl/leaders"
-
-    response = requests.get(url)
-    data = response.json()
-
-    leaders = data['leaders']['categories'][5]['leaders']
-
-    # set up the dataframe:
-    pim_df = pd.DataFrame({
-        'Player': leader['athlete']['displayName'],
-        'Team': leader['team']['displayName'],
-        'PIM': leader['displayValue']
-    }
-    for leader in leaders                        
-    )
-
-    pim_df.index = range(1, len(pim_df) + 1)
-    return pim_df
+    categories = _fetch_nhl_data()
+    if categories is None or len(categories) < 6:
+        return pd.DataFrame()
+    return _build_leaders_df(categories[5]['leaders'], 'PIM')

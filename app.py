@@ -133,93 +133,153 @@ if raw_data:
     # Stats Section
     if sport == "NHL":
         st.divider()
-        st.subheader("NHL Points Leaders")
+        st.subheader("📊 NHL Statistics")
+
         points_df = fetch_nhl_points_leaders()
-        st.dataframe(points_df, width='stretch')
-        st.divider()
+        if not points_df.empty:
+            st.subheader("Points Leaders")
+            st.dataframe(points_df, width='stretch')
+            st.divider()
+        else:
+            st.warning("Unable to load NHL Points leaders")
 
         goals_df = fetch_nhl_goals_leaders()
-        st.subheader("NHL Goals Leaders")
-        st.dataframe(goals_df, width='stretch')
-        st.divider()
+        if not goals_df.empty:
+            st.subheader("Goals Leaders")
+            st.dataframe(goals_df, width='stretch')
+            st.divider()
+        else:
+            st.warning("Unable to load NHL Goals leaders")
 
         assists_df = fetch_nhl_assists_leaders()
-        st.subheader("NHL Assists Leaders")
-        st.dataframe(assists_df, width='stretch')
-        st.divider()
+        if not assists_df.empty:
+            st.subheader("Assists Leaders")
+            st.dataframe(assists_df, width='stretch')
+            st.divider()
+        else:
+            st.warning("Unable to load NHL Assists leaders")
 
         plus_minus_df = fetch_nhl_plus_minus_leaders()
-        st.subheader("NHL Plus/Minus Leaders")
-        st.dataframe(plus_minus_df, width='stretch')
-        st.divider()
+        if not plus_minus_df.empty:
+            st.subheader("Plus/Minus Leaders")
+            st.dataframe(plus_minus_df, width='stretch')
+            st.divider()
+        else:
+            st.warning("Unable to load NHL Plus/Minus leaders")
 
         gaa_df = fetch_nhl_gaa_leaders()
-        st.subheader("NHL Goals Against Average (GAA) Leaders")
-        st.dataframe(gaa_df, width='stretch')
-        st.divider()
+        if not gaa_df.empty:
+            st.subheader("Goals Against Average (GAA) Leaders")
+            st.dataframe(gaa_df, width='stretch')
+            st.divider()
+        else:
+            st.warning("Unable to load NHL GAA leaders")
 
         pim_df = fetch_nhl_pim_leaders()
-        st.subheader("NHL Penalty Minutes (PIM) Leaders")
-        st.dataframe(pim_df, width='stretch')
+        if not pim_df.empty:
+            st.subheader("Penalty Minutes (PIM) Leaders")
+            st.dataframe(pim_df, width='stretch')
+        else:
+            st.warning("Unable to load NHL PIM leaders")
 
     elif sport == "NBA":
         st.divider()
-        st.subheader("NBA Points Per Game (PPG) Leaders")
+        st.subheader("📊 NBA Statistics")
+
         ppg_df = fetch_nba_ppg_leaders()
-        st.dataframe(ppg_df, width='stretch')
-        st.divider()
+        if not ppg_df.empty:
+            st.subheader("Points Per Game (PPG) Leaders")
+            st.dataframe(ppg_df, width='stretch')
+            st.divider()
+        else:
+            st.warning("Unable to load NBA PPG leaders")
 
-        st.subheader("NBA Assists Per Game (APG) Leaders")
         assists_df = fetch_nba_assists_leaders()
-        st.dataframe(assists_df, width='stretch')
-        st.divider()
+        if not assists_df.empty:
+            st.subheader("Assists Per Game (APG) Leaders")
+            st.dataframe(assists_df, width='stretch')
+            st.divider()
+        else:
+            st.warning("Unable to load NBA APG leaders")
 
-        st.subheader("NBA Field Goal Percentage (FG%) Leaders")
         fgp_df = fetch_nba_fgp_leaders()
-        st.dataframe(fgp_df, width='stretch')
-        st.divider()
+        if not fgp_df.empty:
+            st.subheader("Field Goal Percentage (FG%) Leaders")
+            st.dataframe(fgp_df, width='stretch')
+            st.divider()
+        else:
+            st.warning("Unable to load NBA FG% leaders")
 
-        st.subheader("NBA Rebounds Per Game (RPG) Leaders")
         rebounds_df = fetch_nba_rebounds_leaders()
-        st.dataframe(rebounds_df, width='stretch')
-        st.divider()
+        if not rebounds_df.empty:
+            st.subheader("Rebounds Per Game (RPG) Leaders")
+            st.dataframe(rebounds_df, width='stretch')
+            st.divider()
+        else:
+            st.warning("Unable to load NBA RPG leaders")
 
-        st.subheader("NBA Free Throw Percentage (FT%) Leaders")
         ftp_df = fetch_nba_ftp_leaders()
-        st.dataframe(ftp_df, width='stretch')
-        st.divider()
+        if not ftp_df.empty:
+            st.subheader("Free Throw Percentage (FT%) Leaders")
+            st.dataframe(ftp_df, width='stretch')
+            st.divider()
+        else:
+            st.warning("Unable to load NBA FT% leaders")
 
-        st.subheader("NBA 3-Point Percentage (3P%) Leaders")
         threept_df = fetch_nba_3pt_leaders()
-        st.dataframe(threept_df, width='stretch')
-        st.divider()
+        if not threept_df.empty:
+            st.subheader("3-Point Percentage (3P%) Leaders")
+            st.dataframe(threept_df, width='stretch')
+            st.divider()
+        else:
+            st.warning("Unable to load NBA 3P% leaders")
 
-        st.subheader("NBA Steals Per Game (SPG) Leaders")
         steals_df = fetch_nba_steals_leaders()
-        st.dataframe(steals_df, width='stretch')
+        if not steals_df.empty:
+            st.subheader("Steals Per Game (SPG) Leaders")
+            st.dataframe(steals_df, width='stretch')
+        else:
+            st.warning("Unable to load NBA SPG leaders")
 
     elif sport == "NFL":
         st.divider()
-        st.subheader("NFL Passing Yards Leaders")
+        st.subheader("📊 NFL Statistics")
+
         passing_df = fetch_nfl_passing_leaders()
-        st.dataframe(passing_df, width='stretch')
+        if not passing_df.empty:
+            st.subheader("Passing Yards Leaders")
+            st.dataframe(passing_df, width='stretch')
+            st.divider()
+        else:
+            st.warning("Unable to load NFL Passing leaders")
 
-        st.divider()
-        st.subheader("NFL Rushing Yards Leaders")
         rushing_df = fetch_nfl_rushing_leaders()
-        st.dataframe(rushing_df, width='stretch')
+        if not rushing_df.empty:
+            st.subheader("Rushing Yards Leaders")
+            st.dataframe(rushing_df, width='stretch')
+            st.divider()
+        else:
+            st.warning("Unable to load NFL Rushing leaders")
 
-        st.divider()
-        st.subheader("NFL Receiving Yards Leaders")
         receiving_df = fetch_nfl_receiving_leaders()
-        st.dataframe(receiving_df, width='stretch')
+        if not receiving_df.empty:
+            st.subheader("Receiving Yards Leaders")
+            st.dataframe(receiving_df, width='stretch')
+            st.divider()
+        else:
+            st.warning("Unable to load NFL Receiving leaders")
 
-        st.divider()
-        st.subheader("NFL Total Tackles Leaders")
         tackles_df = fetch_nfl_tackles_leaders()
-        st.dataframe(tackles_df, width='stretch')
+        if not tackles_df.empty:
+            st.subheader("Total Tackles Leaders")
+            st.dataframe(tackles_df, width='stretch')
+            st.divider()
+        else:
+            st.warning("Unable to load NFL Tackles leaders")
 
-        st.divider()
-        st.subheader("NFL Total Sacks Leaders")
         sacks_df = fetch_nfl_sacks_leaders()
-        st.dataframe(sacks_df, width='stretch')
+        if not sacks_df.empty:
+            st.subheader("Total Sacks Leaders")
+            st.dataframe(sacks_df, width='stretch')
+        else:
+            st.warning("Unable to load NFL Sacks leaders")

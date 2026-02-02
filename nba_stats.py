@@ -1,142 +1,83 @@
 import requests
 import pandas as pd
 
-def fetch_nba_ppg_leaders():
+# Cache for API data to avoid multiple calls
+_nba_data_cache = None
+
+def _fetch_nba_data():
+    """Fetch NBA leaders data from ESPN API with error handling."""
+    global _nba_data_cache
+
+    if _nba_data_cache is not None:
+        return _nba_data_cache
+
     url = "https://site.api.espn.com/apis/site/v3/sports/basketball/nba/leaders"
 
-    response = requests.get(url)
-    data = response.json()
+    try:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+        _nba_data_cache = data['leaders']['categories']
+        return _nba_data_cache
+    except (requests.RequestException, KeyError, ValueError) as e:
+        print(f"Error fetching NBA data: {e}")
+        return None
 
-    leaders = data['leaders']['categories'][0]['leaders']
+def _build_leaders_df(leaders, stat_column_name):
+    """Helper function to build a DataFrame from leaders data."""
+    if not leaders:
+        return pd.DataFrame()
 
-    # set up the dataframe:
-    ppg_df = pd.DataFrame({
-        'Player': leader['athlete']['displayName'],
-        'Team': leader['team']['displayName'],
-        'PPG': leader['displayValue']
-    }
-    for leader in leaders                        
-    )
+    try:
+        df = pd.DataFrame({
+            'Player': [leader['athlete']['displayName'] for leader in leaders],
+            'Team': [leader['team']['displayName'] for leader in leaders],
+            stat_column_name: [leader['displayValue'] for leader in leaders]
+        })
+        df.index = range(1, len(df) + 1)
+        return df
+    except (KeyError, TypeError) as e:
+        print(f"Error building DataFrame: {e}")
+        return pd.DataFrame()
 
-    ppg_df.index = range(1, len(ppg_df) + 1)
-    return ppg_df
+def fetch_nba_ppg_leaders():
+    categories = _fetch_nba_data()
+    if categories is None or len(categories) < 1:
+        return pd.DataFrame()
+    return _build_leaders_df(categories[0]['leaders'], 'PPG')
 
 def fetch_nba_assists_leaders():
-    url = "https://site.api.espn.com/apis/site/v3/sports/basketball/nba/leaders"
-
-    response = requests.get(url)
-    data = response.json()
-
-    leaders = data['leaders']['categories'][1]['leaders']
-
-    # set up the dataframe:
-    assists_df = pd.DataFrame({
-        'Player': leader['athlete']['displayName'],
-        'Team': leader['team']['displayName'],
-        'APG': leader['displayValue']
-    }
-    for leader in leaders                        
-    )
-
-    assists_df.index = range(1, len(assists_df) + 1)
-    return assists_df
+    categories = _fetch_nba_data()
+    if categories is None or len(categories) < 2:
+        return pd.DataFrame()
+    return _build_leaders_df(categories[1]['leaders'], 'APG')
 
 def fetch_nba_fgp_leaders():
-    url = "https://site.api.espn.com/apis/site/v3/sports/basketball/nba/leaders"
-
-    response = requests.get(url)
-    data = response.json()
-
-    leaders = data['leaders']['categories'][2]['leaders']
-
-    # set up the dataframe:
-    fgp_df = pd.DataFrame({
-        'Player': leader['athlete']['displayName'],
-        'Team': leader['team']['displayName'],
-        'FG%': leader['displayValue']
-    }
-    for leader in leaders                        
-    )
-
-    fgp_df.index = range(1, len(fgp_df) + 1)
-    return fgp_df
+    categories = _fetch_nba_data()
+    if categories is None or len(categories) < 3:
+        return pd.DataFrame()
+    return _build_leaders_df(categories[2]['leaders'], 'FG%')
 
 def fetch_nba_rebounds_leaders():
-    url = "https://site.api.espn.com/apis/site/v3/sports/basketball/nba/leaders"
-
-    response = requests.get(url)
-    data = response.json()
-
-    leaders = data['leaders']['categories'][3]['leaders']
-
-    # set up the dataframe:
-    rebounds_df = pd.DataFrame({
-        'Player': leader['athlete']['displayName'],
-        'Team': leader['team']['displayName'],
-        'RPG': leader['displayValue']
-    }
-    for leader in leaders                        
-    )
-
-    rebounds_df.index = range(1, len(rebounds_df) + 1)
-    return rebounds_df
+    categories = _fetch_nba_data()
+    if categories is None or len(categories) < 4:
+        return pd.DataFrame()
+    return _build_leaders_df(categories[3]['leaders'], 'RPG')
 
 def fetch_nba_ftp_leaders():
-    url = "https://site.api.espn.com/apis/site/v3/sports/basketball/nba/leaders"
-
-    response = requests.get(url)
-    data = response.json()
-
-    leaders = data['leaders']['categories'][6]['leaders']
-
-    # set up the dataframe:
-    rebounds_df = pd.DataFrame({
-        'Player': leader['athlete']['displayName'],
-        'Team': leader['team']['displayName'],
-        'FTP': leader['displayValue']
-    }
-    for leader in leaders                        
-    )
-
-    rebounds_df.index = range(1, len(rebounds_df) + 1)
-    return rebounds_df
+    categories = _fetch_nba_data()
+    if categories is None or len(categories) < 7:
+        return pd.DataFrame()
+    return _build_leaders_df(categories[6]['leaders'], 'FT%')
 
 def fetch_nba_3pt_leaders():
-    url = "https://site.api.espn.com/apis/site/v3/sports/basketball/nba/leaders"
-
-    response = requests.get(url)
-    data = response.json()
-
-    leaders = data['leaders']['categories'][7]['leaders']
-
-    # set up the dataframe:
-    threept_df = pd.DataFrame({
-        'Player': leader['athlete']['displayName'],
-        'Team': leader['team']['displayName'],
-        '3PT%': leader['displayValue']
-    }
-    for leader in leaders                        
-    )
-
-    threept_df.index = range(1, len(threept_df) + 1)
-    return threept_df
+    categories = _fetch_nba_data()
+    if categories is None or len(categories) < 8:
+        return pd.DataFrame()
+    return _build_leaders_df(categories[7]['leaders'], '3PT%')
 
 def fetch_nba_steals_leaders():
-    url = "https://site.api.espn.com/apis/site/v3/sports/basketball/nba/leaders"
-
-    response = requests.get(url)
-    data = response.json()
-
-    leaders = data['leaders']['categories'][4]['leaders']
-
-    # set up the dataframe:
-    steals_df = pd.DataFrame({
-        'Player': leader['athlete']['displayName'],
-        'Team': leader['team']['displayName'],
-        'SPG': leader['displayValue']
-    }
-    for leader in leaders                        
-    )
-
-    steals_df.index = range(1, len(steals_df) + 1)
-    return steals_df
+    categories = _fetch_nba_data()
+    if categories is None or len(categories) < 5:
+        return pd.DataFrame()
+    return _build_leaders_df(categories[4]['leaders'], 'SPG')

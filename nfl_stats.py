@@ -1,102 +1,71 @@
 import requests
 import pandas as pd
 
-def fetch_nfl_passing_leaders():
+# Cache for API data to avoid multiple calls
+_nfl_data_cache = None
+
+def _fetch_nfl_data():
+    """Fetch NFL leaders data from ESPN API with error handling."""
+    global _nfl_data_cache
+
+    if _nfl_data_cache is not None:
+        return _nfl_data_cache
+
     url = "https://site.api.espn.com/apis/site/v3/sports/football/nfl/leaders"
 
-    response = requests.get(url)
-    data = response.json()
+    try:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+        _nfl_data_cache = data['leaders']['categories']
+        return _nfl_data_cache
+    except (requests.RequestException, KeyError, ValueError) as e:
+        print(f"Error fetching NFL data: {e}")
+        return None
 
-    leaders = data['leaders']['categories'][0]['leaders']
+def _build_leaders_df(leaders, stat_column_name):
+    """Helper function to build a DataFrame from leaders data."""
+    if not leaders:
+        return pd.DataFrame()
 
-    # set up the dataframe:
-    passing_df = pd.DataFrame({
-        'Player': leader['athlete']['displayName'],
-        'Team': leader['team']['displayName'],
-        'Yards': leader['displayValue']
-    }
-    for leader in leaders                        
-    )
+    try:
+        df = pd.DataFrame({
+            'Player': [leader['athlete']['displayName'] for leader in leaders],
+            'Team': [leader['team']['displayName'] for leader in leaders],
+            stat_column_name: [leader['displayValue'] for leader in leaders]
+        })
+        df.index = range(1, len(df) + 1)
+        return df
+    except (KeyError, TypeError) as e:
+        print(f"Error building DataFrame: {e}")
+        return pd.DataFrame()
 
-    passing_df.index = range(1, len(passing_df) + 1)
-    return passing_df
+def fetch_nfl_passing_leaders():
+    categories = _fetch_nfl_data()
+    if categories is None or len(categories) < 1:
+        return pd.DataFrame()
+    return _build_leaders_df(categories[0]['leaders'], 'Yards')
 
 def fetch_nfl_rushing_leaders():
-    url = "https://site.api.espn.com/apis/site/v3/sports/football/nfl/leaders"
-
-    response = requests.get(url)
-    data = response.json()
-
-    leaders = data['leaders']['categories'][1]['leaders']
-
-    # set up the dataframe:
-    rushing_df = pd.DataFrame({
-        'Player': leader['athlete']['displayName'],
-        'Team': leader['team']['displayName'],
-        'Yards': leader['displayValue']
-    }
-    for leader in leaders                        
-    )
-
-    rushing_df.index = range(1, len(rushing_df) + 1)
-    return rushing_df
+    categories = _fetch_nfl_data()
+    if categories is None or len(categories) < 2:
+        return pd.DataFrame()
+    return _build_leaders_df(categories[1]['leaders'], 'Yards')
 
 def fetch_nfl_receiving_leaders():
-    url = "https://site.api.espn.com/apis/site/v3/sports/football/nfl/leaders"
-
-    response = requests.get(url)
-    data = response.json()
-
-    leaders = data['leaders']['categories'][2]['leaders']
-
-    # set up the dataframe:
-    receiving_df = pd.DataFrame({
-        'Player': leader['athlete']['displayName'],
-        'Team': leader['team']['displayName'],
-        'Yards': leader['displayValue']
-    }
-    for leader in leaders                        
-    )
-
-    receiving_df.index = range(1, len(receiving_df) + 1)
-    return receiving_df
+    categories = _fetch_nfl_data()
+    if categories is None or len(categories) < 3:
+        return pd.DataFrame()
+    return _build_leaders_df(categories[2]['leaders'], 'Yards')
 
 def fetch_nfl_tackles_leaders():
-    url = "https://site.api.espn.com/apis/site/v3/sports/football/nfl/leaders"
-
-    response = requests.get(url)
-    data = response.json()
-
-    leaders = data['leaders']['categories'][3]['leaders']
-
-    # set up the dataframe:
-    tackles_df = pd.DataFrame({
-        'Player': leader['athlete']['displayName'],
-        'Team': leader['team']['displayName'],
-        'Tackles': leader['displayValue']
-    }
-    for leader in leaders                        
-    )
-
-    tackles_df.index = range(1, len(tackles_df) + 1)
-    return tackles_df
+    categories = _fetch_nfl_data()
+    if categories is None or len(categories) < 4:
+        return pd.DataFrame()
+    return _build_leaders_df(categories[3]['leaders'], 'Tackles')
 
 def fetch_nfl_sacks_leaders():
-    url = "https://site.api.espn.com/apis/site/v3/sports/football/nfl/leaders"
-
-    response = requests.get(url)
-    data = response.json()
-
-    leaders = data['leaders']['categories'][4]['leaders']
-
-    # set up the dataframe:
-    sacks_df = pd.DataFrame({
-        'Player': leader['athlete']['displayName'],
-        'Team': leader['team']['displayName'],
-        'Sacks': leader['displayValue']
-    }
-    for leader in leaders                        
-    )
-
-    sacks_df.index = range(1, len(sacks_df) + 1)
-    return sacks_df
+    categories = _fetch_nfl_data()
+    if categories is None or len(categories) < 5:
+        return pd.DataFrame()
+    return _build_leaders_df(categories[4]['leaders'], 'Sacks')

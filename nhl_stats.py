@@ -3,10 +3,11 @@ import pandas as pd
 
 # Cache for API data to avoid multiple calls
 _nhl_data_cache = None
+_nhl_season_type = None
 
 def _fetch_nhl_data():
     """Fetch NHL leaders data from ESPN API with error handling."""
-    global _nhl_data_cache
+    global _nhl_data_cache, _nhl_season_type
 
     if _nhl_data_cache is not None:
         return _nhl_data_cache
@@ -18,10 +19,20 @@ def _fetch_nhl_data():
         response.raise_for_status()
         data = response.json()
         _nhl_data_cache = data['leaders']['categories']
+        _nhl_season_type = data['currentSeason']['type']['name']
         return _nhl_data_cache
     except (requests.RequestException, KeyError, ValueError) as e:
         print(f"Error fetching NHL data: {e}")
         return None
+
+def get_nhl_season_type():
+    """Get the current NHL season type (Regular Season, Postseason, etc.)."""
+    if _nhl_season_type is not None:
+        return _nhl_season_type
+
+    # Fetch data to populate cache if not already done
+    _fetch_nhl_data()
+    return _nhl_season_type if _nhl_season_type else "Season"
 
 def _build_leaders_df(leaders, stat_column_name):
     """Helper function to build a DataFrame from leaders data."""

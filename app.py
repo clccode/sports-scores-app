@@ -5,13 +5,14 @@ from streamlit_js import st_js
 from espn_api import (fetch_nba_scores, fetch_nhl_scores, fetch_nfl_scores, fetch_premier_league_scores,
                       parse_game_data, fetch_nhl_news, fetch_nba_news, fetch_nfl_news, 
                       fetch_premier_league_news)
-from nhl_stats import (fetch_nhl_points_leaders, fetch_nhl_goals_leaders, fetch_nhl_assists_leaders, 
-                       fetch_nhl_plus_minus_leaders, fetch_nhl_gaa_leaders, fetch_nhl_pim_leaders)
-from nba_stats import (fetch_nba_ppg_leaders, fetch_nba_assists_leaders, fetch_nba_fgp_leaders, 
-                       fetch_nba_rebounds_leaders, fetch_nba_ftp_leaders, fetch_nba_3pt_leaders, 
-                       fetch_nba_steals_leaders)
-from nfl_stats import (fetch_nfl_passing_leaders, fetch_nfl_rushing_leaders, fetch_nfl_receiving_leaders, 
-                       fetch_nfl_tackles_leaders, fetch_nfl_sacks_leaders)
+from nhl_stats import (fetch_nhl_points_leaders, fetch_nhl_goals_leaders, fetch_nhl_assists_leaders,
+                       fetch_nhl_plus_minus_leaders, fetch_nhl_gaa_leaders, fetch_nhl_pim_leaders,
+                       get_nhl_season_type)
+from nba_stats import (fetch_nba_ppg_leaders, fetch_nba_assists_leaders, fetch_nba_fgp_leaders,
+                       fetch_nba_rebounds_leaders, fetch_nba_ftp_leaders, fetch_nba_3pt_leaders,
+                       fetch_nba_steals_leaders, get_nba_season_type)
+from nfl_stats import (fetch_nfl_passing_leaders, fetch_nfl_rushing_leaders, fetch_nfl_receiving_leaders,
+                       fetch_nfl_tackles_leaders, fetch_nfl_sacks_leaders, get_nfl_season_type)
 from formatters import format_game_time
 import pytz
 
@@ -134,6 +135,7 @@ if raw_data:
     if sport == "NHL":
         st.divider()
         st.subheader("📊 NHL Statistics")
+        st.caption(get_nhl_season_type())
 
         points_df = fetch_nhl_points_leaders()
         if not points_df.empty:
@@ -185,6 +187,7 @@ if raw_data:
     elif sport == "NBA":
         st.divider()
         st.subheader("📊 NBA Statistics")
+        st.caption(get_nba_season_type())
 
         ppg_df = fetch_nba_ppg_leaders()
         if not ppg_df.empty:
@@ -244,6 +247,7 @@ if raw_data:
     elif sport == "NFL":
         st.divider()
         st.subheader("📊 NFL Statistics")
+        st.caption(get_nfl_season_type())
 
         passing_df = fetch_nfl_passing_leaders()
         if not passing_df.empty:

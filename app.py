@@ -17,7 +17,7 @@ from formatters import format_game_time
 import pytz
 
 # Page config
-st.set_page_config(page_title="Sports Scores", page_icon="🏅", layout="wide")
+st.set_page_config(page_title="Sports Scores", page_icon="🏆", layout="wide")
 
 # Sidebar
 st.sidebar.header("Settings")

@@ -13,6 +13,7 @@ from nba_stats import (fetch_nba_ppg_leaders, fetch_nba_assists_leaders, fetch_n
                        fetch_nba_steals_leaders, get_nba_season_type)
 from nfl_stats import (fetch_nfl_passing_leaders, fetch_nfl_rushing_leaders, fetch_nfl_receiving_leaders,
                        fetch_nfl_tackles_leaders, fetch_nfl_sacks_leaders, get_nfl_season_type)
+from pl_stats import (fetch_pl_goal_leaders, fetch_pl_assist_leaders, get_pl_season_type)
 from formatters import format_game_time
 import pytz
 
@@ -287,3 +288,22 @@ if raw_data:
             st.dataframe(sacks_df, width='stretch')
         else:
             st.warning("Unable to load NFL Sacks leaders")
+    elif sport == "Premier League":
+        st.divider()
+        st.subheader("📊 Premier League Statistics")
+        st.caption(get_pl_season_type())
+
+        goal_df = fetch_pl_goal_leaders()
+        if not goal_df.empty:
+            st.subheader("Goal Leaders")
+            st.dataframe(goal_df)
+            st.divider()
+        else:
+            st.warning("Unable to load Premier League Goal leaders")
+
+        assist_df = fetch_pl_assist_leaders()
+        if not assist_df.empty:
+            st.subheader("Assist Leaders")
+            st.dataframe(assist_df)
+        else:
+            st.warning("Unable to load Premier League Assist leaders")

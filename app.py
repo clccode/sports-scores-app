@@ -288,6 +288,7 @@ if raw_data:
             st.dataframe(sacks_df, width='stretch')
         else:
             st.warning("Unable to load NFL Sacks leaders")
+            
     elif sport == "Premier League":
         st.divider()
         st.subheader("📊 Premier League Statistics")

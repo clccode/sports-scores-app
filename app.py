@@ -141,7 +141,7 @@ if raw_data:
         points_df = fetch_nhl_points_leaders()
         if not points_df.empty:
             st.subheader("Points Leaders")
-            st.dataframe(points_df, use_container_width=False)
+            st.dataframe(points_df, width='content')
             st.divider()
         else:
             st.warning("Unable to load NHL Points leaders")
@@ -149,7 +149,7 @@ if raw_data:
         goals_df = fetch_nhl_goals_leaders()
         if not goals_df.empty:
             st.subheader("Goals Leaders")
-            st.dataframe(goals_df, use_container_width=False)
+            st.dataframe(goals_df, width='content')
             st.divider()
         else:
             st.warning("Unable to load NHL Goals leaders")
@@ -157,7 +157,7 @@ if raw_data:
         assists_df = fetch_nhl_assists_leaders()
         if not assists_df.empty:
             st.subheader("Assists Leaders")
-            st.dataframe(assists_df, use_container_width=False)
+            st.dataframe(assists_df, width='content')
             st.divider()
         else:
             st.warning("Unable to load NHL Assists leaders")
@@ -165,7 +165,7 @@ if raw_data:
         plus_minus_df = fetch_nhl_plus_minus_leaders()
         if not plus_minus_df.empty:
             st.subheader("Plus/Minus Leaders")
-            st.dataframe(plus_minus_df, use_container_width=False)
+            st.dataframe(plus_minus_df, width='content')
             st.divider()
         else:
             st.warning("Unable to load NHL Plus/Minus leaders")
@@ -173,7 +173,7 @@ if raw_data:
         gaa_df = fetch_nhl_gaa_leaders()
         if not gaa_df.empty:
             st.subheader("Goals Against Average (GAA) Leaders")
-            st.dataframe(gaa_df, use_container_width=False)
+            st.dataframe(gaa_df, width='content')
             st.divider()
         else:
             st.warning("Unable to load NHL GAA leaders")
@@ -181,7 +181,7 @@ if raw_data:
         pim_df = fetch_nhl_pim_leaders()
         if not pim_df.empty:
             st.subheader("Penalty Minutes (PIM) Leaders")
-            st.dataframe(pim_df, use_container_width=False)
+            st.dataframe(pim_df, width='content')
         else:
             st.warning("Unable to load NHL PIM leaders")
 
@@ -193,7 +193,7 @@ if raw_data:
         ppg_df = fetch_nba_ppg_leaders()
         if not ppg_df.empty:
             st.subheader("Points Per Game (PPG) Leaders")
-            st.dataframe(ppg_df, use_container_width=False)
+            st.dataframe(ppg_df, width='content')
             st.divider()
         else:
             st.warning("Unable to load NBA PPG leaders")
@@ -201,7 +201,7 @@ if raw_data:
         assists_df = fetch_nba_assists_leaders()
         if not assists_df.empty:
             st.subheader("Assists Per Game (APG) Leaders")
-            st.dataframe(assists_df, use_container_width=False)
+            st.dataframe(assists_df, width='content')
             st.divider()
         else:
             st.warning("Unable to load NBA APG leaders")
@@ -209,7 +209,7 @@ if raw_data:
         fgp_df = fetch_nba_fgp_leaders()
         if not fgp_df.empty:
             st.subheader("Field Goal Percentage (FG%) Leaders")
-            st.dataframe(fgp_df, use_container_width=False)
+            st.dataframe(fgp_df, width='content')
             st.divider()
         else:
             st.warning("Unable to load NBA FG% leaders")
@@ -217,7 +217,7 @@ if raw_data:
         rebounds_df = fetch_nba_rebounds_leaders()
         if not rebounds_df.empty:
             st.subheader("Rebounds Per Game (RPG) Leaders")
-            st.dataframe(rebounds_df, use_container_width=False)
+            st.dataframe(rebounds_df, width='content')
             st.divider()
         else:
             st.warning("Unable to load NBA RPG leaders")
@@ -225,7 +225,7 @@ if raw_data:
         ftp_df = fetch_nba_ftp_leaders()
         if not ftp_df.empty:
             st.subheader("Free Throw Percentage (FT%) Leaders")
-            st.dataframe(ftp_df, use_container_width=False)
+            st.dataframe(ftp_df, width='content')
             st.divider()
         else:
             st.warning("Unable to load NBA FT% leaders")
@@ -233,7 +233,7 @@ if raw_data:
         threept_df = fetch_nba_3pt_leaders()
         if not threept_df.empty:
             st.subheader("3-Point Percentage (3P%) Leaders")
-            st.dataframe(threept_df, use_container_width=False)
+            st.dataframe(threept_df, width='content')
             st.divider()
         else:
             st.warning("Unable to load NBA 3P% leaders")
@@ -241,7 +241,7 @@ if raw_data:
         steals_df = fetch_nba_steals_leaders()
         if not steals_df.empty:
             st.subheader("Steals Per Game (SPG) Leaders")
-            st.dataframe(steals_df, use_container_width=False)
+            st.dataframe(steals_df, width='content')
         else:
             st.warning("Unable to load NBA SPG leaders")
 
@@ -253,7 +253,7 @@ if raw_data:
         passing_df = fetch_nfl_passing_leaders()
         if not passing_df.empty:
             st.subheader("Passing Yards Leaders")
-            st.dataframe(passing_df, use_container_width=False)
+            st.dataframe(passing_df, width='content')
             st.divider()
         else:
             st.warning("Unable to load NFL Passing leaders")
@@ -261,7 +261,7 @@ if raw_data:
         rushing_df = fetch_nfl_rushing_leaders()
         if not rushing_df.empty:
             st.subheader("Rushing Yards Leaders")
-            st.dataframe(rushing_df, use_container_width=False)
+            st.dataframe(rushing_df, width='content')
             st.divider()
         else:
             st.warning("Unable to load NFL Rushing leaders")
@@ -269,7 +269,7 @@ if raw_data:
         receiving_df = fetch_nfl_receiving_leaders()
         if not receiving_df.empty:
             st.subheader("Receiving Yards Leaders")
-            st.dataframe(receiving_df, use_container_width=False)
+            st.dataframe(receiving_df, width='content')
             st.divider()
         else:
             st.warning("Unable to load NFL Receiving leaders")
@@ -277,7 +277,7 @@ if raw_data:
         tackles_df = fetch_nfl_tackles_leaders()
         if not tackles_df.empty:
             st.subheader("Total Tackles Leaders")
-            st.dataframe(tackles_df, use_container_width=False)
+            st.dataframe(tackles_df, width='content')
             st.divider()
         else:
             st.warning("Unable to load NFL Tackles leaders")
@@ -285,7 +285,7 @@ if raw_data:
         sacks_df = fetch_nfl_sacks_leaders()
         if not sacks_df.empty:
             st.subheader("Total Sacks Leaders")
-            st.dataframe(sacks_df, use_container_width=False)
+            st.dataframe(sacks_df, width='content')
         else:
             st.warning("Unable to load NFL Sacks leaders")
             
@@ -297,7 +297,7 @@ if raw_data:
         goal_df = fetch_pl_goal_leaders()
         if not goal_df.empty:
             st.subheader("Goal Leaders")
-            st.dataframe(goal_df, use_container_width=False)
+            st.dataframe(goal_df, width='content')
             st.divider()
         else:
             st.warning("Unable to load Premier League Goal leaders")
@@ -305,6 +305,6 @@ if raw_data:
         assist_df = fetch_pl_assist_leaders()
         if not assist_df.empty:
             st.subheader("Assist Leaders")
-            st.dataframe(assist_df, use_container_width=False)
+            st.dataframe(assist_df, width='content')
         else:
             st.warning("Unable to load Premier League Assist leaders")

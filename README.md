@@ -7,7 +7,7 @@ A real-time sports scores dashboard built with Streamlit, displaying live scores
 - 🏒 NHL scores, schedules, and stats
 - 🏀 NBA scores, schedules, and stats
 - 🏈 NFL scores, schedules, and stats
-- ⚽️ Premier League scores and schedules
+- ⚽️ Premier League scores, schedules, and stats
 - 🕐 Timezone-aware game times
 - 🎲 Pre-game odds (via DraftKings)
 - 📊 Live game status with period/quarter info

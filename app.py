@@ -22,7 +22,18 @@ st.set_page_config(page_title="Sports Scores", page_icon="🏆", layout="wide")
 
 # Sidebar
 st.sidebar.header("Settings")
-sport = st.sidebar.selectbox("Sport", ["NHL", "NBA", "NFL", "Premier League"])
+
+# Initialize session state for sport selection
+if "selected_sport" not in st.session_state:
+    st.session_state.selected_sport = "Home"
+
+sport_options = ["Home", "NHL", "NBA", "NFL", "Premier League"]
+sport = st.sidebar.selectbox(
+    "Sport",
+    sport_options,
+    index=sport_options.index(st.session_state.selected_sport),
+)
+st.session_state.selected_sport = sport
 
 # Get the user's timezone using JavaScript's Intl API
 user_tz = st_js("""
@@ -51,6 +62,25 @@ st.sidebar.caption(f"Detected Timezone: {default_timezone}")
 
 if st.sidebar.button("🔄 Refresh"):
     st.rerun()  # Forces the whole app to re-run, fetching fresh data
+
+if sport == "Home":
+    st.title("Sports Dashboard")
+    st.write("Select a sport to view scores, news, and stats.")
+    st.divider()
+
+    cols = st.columns(4)
+    sports = [
+        ("🏒", "NHL"),
+        ("🏀", "NBA"),
+        ("🏈", "NFL"),
+        ("⚽", "Premier League"),
+    ]
+    for col, (icon, name) in zip(cols, sports):
+        with col:
+            if st.button(f"{icon} {name}", use_container_width=True):
+                st.session_state.selected_sport = name
+                st.rerun()
+    st.stop()
 
 st.title(f"{sport}")
 

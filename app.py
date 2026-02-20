@@ -77,7 +77,7 @@ if sport == "Home":
     ]
     for col, (icon, name) in zip(cols, sports):
         with col:
-            if st.button(f"{icon} {name}", use_container_width=True):
+            if st.button(f"{icon} {name}", width="stretch"):
                 st.session_state.selected_sport = name
                 st.rerun()
     st.stop()

@@ -45,7 +45,24 @@ def _build_leaders_df(leaders, stat_column_name):
             'Team': [leader['team']['displayName'] for leader in leaders],
             stat_column_name: [leader['displayValue'] for leader in leaders]
         })
-        df.index = range(1, len(df) + 1)
+        # Calculate rank (make an exception for GAA where lower is better)
+        numeric_col = pd.to_numeric(df[stat_column_name], errors='coerce')
+        df['Rank'] = numeric_col.rank(method='min', ascending=False).astype(int)
+
+        # sort by rank
+        df = df.sort_values('Rank')
+
+        # Check if current rank appears more than once (is tied)
+        rank_counts = df['Rank'].value_counts()
+        df['Display_Rank'] = df['Rank'].apply(
+            lambda rank: f"{rank}" if rank_counts[rank] > 1 else str(rank)
+        )
+        # Set Display_Rank as index
+        df = df.set_index('Display_Rank')
+        df.index.name = 'Rank'
+
+        # Drop the numeric Rank column
+        df = df.drop('Rank', axis=1)
         return df
     except (KeyError, TypeError) as e:
         print(f"Error building DataFrame: {e}")

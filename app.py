@@ -15,7 +15,6 @@ from nfl_stats import (fetch_nfl_passing_leaders, fetch_nfl_rushing_leaders, fet
                        fetch_nfl_tackles_leaders, fetch_nfl_sacks_leaders, get_nfl_season_type)
 from pl_stats import (fetch_pl_goal_leaders, fetch_pl_assist_leaders, get_pl_season_type)
 from formatters import format_game_time
-import pytz
 
 # Page config
 st.set_page_config(page_title="Sports Scores", page_icon="🏆", layout="wide")
@@ -49,7 +48,13 @@ user_tz = st_js("""
 # Timezone selection with default to user's timezone
 default_timezone = user_tz[0] if user_tz else "America/New_York"
 
-timezone_options = pytz.common_timezones
+timezone_options = ["America/New_York", "America/Chicago", "America/Denver", 
+                    "America/Phoenix", "America/Los_Angeles", "America/Anchorage", 
+                    "Pacific/Honolulu", "America/Toronto", "America/Vancouver", 
+                    "UTC", "Europe/London", "Europe/Paris", "Europe/Helsinki", 
+                    "Africa/Cairo", "Africa/Nairobi", "Africa/Lagos", 
+                    "Africa/Johannesburg", "Asia/Dubai", "Asia/Kolkata", "Asia/Shanghai", 
+                    "Asia/Tokyo"]
               
 if default_timezone in timezone_options:                                                                                                            
       default_index = timezone_options.index(default_timezone)                                                                                        

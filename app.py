@@ -159,8 +159,8 @@ if raw_data:
         news = fetch_premier_league_news()
 
     if news:
-        for i, article in enumerate(news[:5], 1):  # Show top 5 articles
-            with st.expander(f"{i}. {article['headline']}", expanded=(i == 1)):
+        for i, article in enumerate(news):  # Show top 5 articles
+            with st.expander(f"{article['headline']}", expanded=(i == 0)):
                 if article['description']:
                     st.write(article['description'])
                 st.markdown(f"[Read full article]({article['url']})")

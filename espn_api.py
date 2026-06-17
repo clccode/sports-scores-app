@@ -3,6 +3,17 @@
 import requests
 from typing import Dict, List, Optional
 
+def fetch_mlb_scores() -> Optional[Dict]:
+    """Fetch current MLB scores and games."""
+    url = "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        return response.json()
+    except Exception as e:
+        print(f"Error fetching MLB scores: {e}")
+        return None
+
 def fetch_nhl_scores() -> Optional[Dict]:
     """Fetch current NHL scores and games."""
     url = "http://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard"
@@ -94,6 +105,28 @@ def parse_game_data(game: Dict, sport: str = "nhl") -> Dict:
         'broadcast': broadcast,
         'sport': sport
     }
+
+def fetch_mlb_news() -> Optional[Dict]:
+    """Fetch latest MLB news articles."""
+    try:
+        url = "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/news"
+        response = requests.get(url)
+        response.raise_for_status()
+        data = response.json()
+
+        news_list = []
+        for article in data['articles']:
+            news_list.append({
+                'headline': article['headline'],
+                'url': article['links']['web']['href'],
+                'description': article.get('description', ''),
+                'published': article.get('published', '')
+            })
+
+        return news_list
+
+    except Exception as e:
+        print(f"Error fetching MLB news: {e}")
 
 def fetch_nhl_news() -> Optional[List[Dict]]:
     """Fetch latest NHL news articles."""

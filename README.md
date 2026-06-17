@@ -4,13 +4,14 @@ A real-time sports scores dashboard built with Streamlit, displaying live scores
 
 ## Features
 
-- 🏒 NHL scores, schedules, and stats
+- ⚾️ MLB scores and schedules (stats coming soon)
 - 🏀 NBA scores, schedules, and stats
 - 🏈 NFL scores, schedules, and stats
+- 🏒 NHL scores, schedules, and stats
 - ⚽️ Premier League scores, schedules, and stats
 - 🕐 Timezone-aware game times
 - 🎲 Pre-game odds (via DraftKings)
-- 📊 Live game status with period/quarter info
+- 📊 Live game status with inning/period/quarter info
 
 ## Live Version
 

@@ -2,9 +2,9 @@
 
 import streamlit as st
 from streamlit_js import st_js
-from espn_api import (fetch_nba_scores, fetch_nhl_scores, fetch_nfl_scores, fetch_premier_league_scores,
-                      parse_game_data, fetch_nhl_news, fetch_nba_news, fetch_nfl_news, 
-                      fetch_premier_league_news)
+from espn_api import (fetch_mlb_scores, fetch_nba_scores, fetch_nhl_scores, fetch_nfl_scores,
+                      fetch_premier_league_scores, parse_game_data, fetch_nhl_news, fetch_nba_news,
+                      fetch_nfl_news, fetch_premier_league_news, fetch_mlb_news)
 from nhl_stats import (fetch_nhl_points_leaders, fetch_nhl_goals_leaders, fetch_nhl_assists_leaders,
                        fetch_nhl_plus_minus_leaders, fetch_nhl_gaa_leaders, fetch_nhl_pim_leaders,
                        get_nhl_season_type)
@@ -26,7 +26,7 @@ st.sidebar.header("Settings")
 if "selected_sport" not in st.session_state:
     st.session_state.selected_sport = "Home"
 
-sport_options = ["Home", "NHL", "NBA", "NFL", "Premier League"]
+sport_options = ["Home", "MLB", "NBA", "NFL", "NHL", "Premier League"]
 sport = st.sidebar.selectbox(
     "Sport",
     sport_options,
@@ -73,11 +73,12 @@ if sport == "Home":
     st.write("Select a sport to view scores, news, and stats.")
     st.divider()
 
-    cols = st.columns(4)
+    cols = st.columns(5)
     sports = [
-        ("🏒", "NHL"),
+        ("⚾️", "MLB"),
         ("🏀", "NBA"),
         ("🏈", "NFL"),
+        ("🏒", "NHL"),
         ("⚽", "Premier League"),
     ]
     for col, (icon, name) in zip(cols, sports):
@@ -93,10 +94,10 @@ raw_data = None
 sport_code = ""
 sport_icon = ""
 
-if sport == "NHL":
-    raw_data = fetch_nhl_scores()
-    sport_code = "nhl"
-    sport_icon = "🏒"
+if sport == "MLB":
+    raw_data = fetch_mlb_scores()
+    sport_code = "mlb"
+    sport_icon = "⚾️"
 elif sport == "NBA":
     raw_data = fetch_nba_scores()
     sport_code = "nba"
@@ -105,6 +106,10 @@ elif sport == "NFL":
     raw_data = fetch_nfl_scores()
     sport_code = "nfl"
     sport_icon = "🏈"
+elif sport == "NHL":
+    raw_data = fetch_nhl_scores()
+    sport_code = "nhl"
+    sport_icon = "🏒"
 elif sport == "Premier League":
     raw_data = fetch_premier_league_scores()
     sport_code = "eng.1"
@@ -149,12 +154,14 @@ if raw_data:
     st.caption("News from ESPN")
 
     # Fetch news based on sport
-    if sport == "NHL":
-        news = fetch_nhl_news()
+    if sport == "MLB":
+        news = fetch_mlb_news()
     elif sport == "NBA":
         news = fetch_nba_news()
     elif sport == "NFL":
         news = fetch_nfl_news()
+    elif sport == "NHL":
+        news = fetch_nhl_news()
     elif sport == "Premier League":
         news = fetch_premier_league_news()
 

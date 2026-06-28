@@ -14,6 +14,8 @@ from nba_stats import (fetch_nba_ppg_leaders, fetch_nba_assists_leaders, fetch_n
 from nfl_stats import (fetch_nfl_passing_leaders, fetch_nfl_rushing_leaders, fetch_nfl_receiving_leaders,
                        fetch_nfl_tackles_leaders, fetch_nfl_sacks_leaders, get_nfl_season_type)
 from pl_stats import (fetch_pl_goal_leaders, fetch_pl_assist_leaders, get_pl_season_type)
+from mlb_stats import (fetch_mlb_batting_avg_leaders, fetch_mlb_home_runs_leaders, fetch_mlb_rbi_leaders, 
+                       fetch_mlb_era_leaders, get_mlb_season_type)
 from formatters import format_game_time
 
 # Page config
@@ -175,7 +177,42 @@ if raw_data:
         st.warning(f"Unable to load {sport} news")
 
     # Stats Section
-    if sport == "NHL":
+    if sport == "MLB":
+        st.divider()
+        st.subheader("📊 MLB Statistics")
+        st.caption(get_mlb_season_type())
+
+        batting_avg_df = fetch_mlb_batting_avg_leaders()
+        if not batting_avg_df.empty:
+            st.subheader("Batting Average Leaders")
+            st.dataframe(batting_avg_df, width='content')
+            st.divider()
+        else:
+            st.warning("Unable to load MLB Batting Average leaders")
+
+        home_runs_df = fetch_mlb_home_runs_leaders()
+        if not home_runs_df.empty:
+            st.subheader("Home Runs Leaders")
+            st.dataframe(home_runs_df, width='content')
+            st.divider()
+        else:
+            st.warning("Unable to load MLB Home Runs leaders")
+
+        rbi_df = fetch_mlb_rbi_leaders()
+        if not rbi_df.empty:
+            st.subheader("Runs Batted In (RBI) Leaders")
+            st.dataframe(rbi_df, width='content')
+        else:
+            st.warning("Unable to load MLB RBI leaders")
+
+        era_df = fetch_mlb_era_leaders()
+        if not era_df.empty:
+            st.subheader("Earned Run Average (ERA) Leaders")
+            st.dataframe(era_df, width='content')
+        else:
+            st.warning("Unable to load MLB ERA leaders")
+
+    elif sport == "NHL":
         st.divider()
         st.subheader("📊 NHL Statistics")
         st.caption(get_nhl_season_type())

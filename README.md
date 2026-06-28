@@ -4,7 +4,7 @@ A real-time sports scores dashboard built with Streamlit, displaying live scores
 
 ## Features
 
-- ⚾️ MLB scores and schedules (stats coming soon)
+- ⚾️ MLB scores and schedules, and stats (more stats coming soon)
 - 🏀 NBA scores, schedules, and stats
 - 🏈 NFL scores, schedules, and stats
 - 🏒 NHL scores, schedules, and stats

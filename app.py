@@ -342,11 +342,11 @@ if raw_data:
             st.dataframe(goal_df, width='content')
             st.divider()
         else:
-            st.warning("Unable to load Premier League Goal leaders")
+            st.warning("Unable to load Premier League Goal leaders or the data is not available")
 
         assist_df = fetch_pl_assist_leaders()
         if not assist_df.empty:
             st.subheader("Assist Leaders")
             st.dataframe(assist_df, width='content')
         else:
-            st.warning("Unable to load Premier League Assist leaders")
+            st.warning("Unable to load Premier League Assist leaders or the data is not available")

@@ -52,7 +52,7 @@ def fetch_pl_goal_leaders():
         return goals_df
     except Exception as e:
         print(f"Error fetching Premier League goal leaders: {e}")
-        return None, pd.DataFrame()
+        return pd.DataFrame()
     
 def fetch_pl_assist_leaders():
     try:
@@ -93,5 +93,5 @@ def fetch_pl_assist_leaders():
         return assist_df
     except Exception as e:
         print(f"Error fetching Premier League assist leaders: {e}")
-        return None, pd.DataFrame()
+        return pd.DataFrame()
         
